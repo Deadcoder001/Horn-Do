@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaRandom, FaRedo, FaHeart, FaListUl, FaInfo, FaGithub, FaLinkedin, FaTwitter, FaTimes, FaTv } from "react-icons/fa";
+import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaRandom, FaRedo, FaHeart, FaListUl, FaInfo, FaGithub, FaLinkedin, FaTimes, FaTv, FaGlobe } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import playlistData from "@/data/data.json";
 import { usePlayer } from "@/context/PlayerContext";
@@ -377,14 +377,14 @@ export default function MusicPlayer() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 0.8 }}
         >
-          <a href="#" className="text-text-secondary hover:text-white hover:scale-110 transition-all">
+          <a href="https://github.com/Deadcoder001" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-white hover:scale-110 transition-all">
             <FaGithub size={20} />
           </a>
-          <a href="#" className="text-text-secondary hover:text-[#0A66C2] hover:scale-110 transition-all">
+          <a href="https://www.linkedin.com/in/ashif-elahi-1740302b3" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-[#0A66C2] hover:scale-110 transition-all">
             <FaLinkedin size={20} />
           </a>
-          <a href="#" className="text-text-secondary hover:text-[#1DA1F2] hover:scale-110 transition-all">
-            <FaTwitter size={20} />
+          <a href="https://ashifelahi.netlify.app" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-primary hover:scale-110 transition-all">
+            <FaGlobe size={20} />
           </a>
         </motion.div>
       </div>
@@ -568,7 +568,10 @@ export default function MusicPlayer() {
                   </p>
                   <div className="p-4 rounded-xl bg-white/5 border border-white/10 mt-8">
                     <h5 className="text-white font-medium mb-1">Version 1.0</h5>
-                    <p className="text-xs">Made with ❤️ by an AI Assistant.</p>
+                    <p className="text-xs mb-3">Made with ❤️ by Ashif Elahi.</p>
+                    <p className="text-xs italic border-t border-white/10 pt-3">
+                      If someone wants to extend this project, they can contact me via <a href="mailto:asifelahi6@gmail.com" className="text-white hover:underline hover:text-primary transition-colors">asifelahi6@gmail.com</a>
+                    </p>
                   </div>
                 </div>
               )}
