@@ -179,7 +179,7 @@ export default function MusicPlayer() {
           dragMomentum={false}
           className={
             isPipMode 
-              ? "fixed bottom-36 right-4 md:right-8 w-[calc(100vw-32px)] md:w-96 aspect-video z-[200] rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black cursor-move" 
+              ? "fixed bottom-32 md:bottom-36 right-4 md:right-8 w-[calc(100vw-32px)] sm:w-80 md:w-96 aspect-video z-[200] rounded-xl md:rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black cursor-move" 
               : "fixed bottom-0 right-0 w-64 h-64 opacity-0 pointer-events-none z-[-10]"
           }
           initial={isPipMode ? { opacity: 0, scale: 0.8, y: 50 } : false}
@@ -233,7 +233,7 @@ export default function MusicPlayer() {
         <motion.div 
           className="glass-panel pointer-events-auto rounded-full overflow-hidden flex flex-col shadow-[0_20px_40px_rgba(0,0,0,0.5)] border-white/10"
           initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1, width: isExpanded ? "min(95vw, 580px)" : "min(90vw, 420px)", borderRadius: isExpanded ? "24px" : "9999px" }}
+          animate={{ y: 0, opacity: 1, width: isExpanded ? "min(95vw, 580px)" : "min(95vw, 420px)", borderRadius: isExpanded ? "24px" : "9999px" }}
           transition={{ 
             default: { type: "spring", stiffness: 300, damping: 30 },
             y: { type: "spring", stiffness: 300, damping: 30, delay: 1.5 },
@@ -241,10 +241,10 @@ export default function MusicPlayer() {
           }}
           onClick={() => !isExpanded && setIsExpanded(true)}
         >
-          <div className="flex items-center p-2 gap-4 w-full">
+          <div className="flex items-center p-1.5 md:p-2 gap-2 md:gap-4 w-full">
             {/* Album Art */}
             <motion.div 
-              className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 cursor-pointer"
+              className="w-10 h-10 md:w-14 md:h-14 rounded-full overflow-hidden flex-shrink-0 cursor-pointer"
               animate={{ rotate: isPlaying ? 360 : 0 }}
               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
               onClick={(e) => {
@@ -260,39 +260,39 @@ export default function MusicPlayer() {
             </motion.div>
             
             {/* Info */}
-            <div className="flex-1 min-w-0 mr-2 cursor-pointer" onClick={(e) => {
+            <div className="flex-1 min-w-0 mr-1 md:mr-2 cursor-pointer" onClick={(e) => {
                   e.stopPropagation();
                   setIsExpanded(!isExpanded);
               }}>
-              <h4 className="text-white font-medium text-sm truncate">{activeTrack.title}</h4>
-              <p className="text-text-secondary text-xs truncate">{activeTrack.artist}</p>
+              <h4 className="text-white font-medium text-xs md:text-sm truncate">{activeTrack.title}</h4>
+              <p className="text-text-secondary text-[10px] md:text-xs truncate">{activeTrack.artist}</p>
             </div>
             
             {/* Controls */}
-            <div className="flex items-center gap-3 pr-2" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-1.5 md:gap-3 pr-1 md:pr-2" onClick={(e) => e.stopPropagation()}>
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div 
                     initial={{ opacity: 0, width: 0 }} 
                     animate={{ opacity: 1, width: "auto" }}
                     exit={{ opacity: 0, width: 0 }}
-                    className="flex items-center gap-3 overflow-hidden mr-2"
+                    className="flex items-center gap-1.5 md:gap-3 overflow-hidden mr-1 md:mr-2"
                   >
-                    <button className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaRandom size={14} /></button>
+                    <button className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaRandom className="text-[12px] md:text-[14px]" /></button>
                   </motion.div>
                 )}
               </AnimatePresence>
               
-              <button onClick={handlePrev} className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaStepBackward size={14} /></button>
+              <button onClick={handlePrev} className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaStepBackward className="text-[12px] md:text-[14px]" /></button>
               
               <button 
-                className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer flex-shrink-0"
+                className="w-8 h-8 md:w-10 md:h-10 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer flex-shrink-0"
                 onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }}
               >
-                {isPlaying ? <FaPause size={14} /> : <FaPlay size={14} className="ml-1" />}
+                {isPlaying ? <FaPause className="text-[12px] md:text-[14px]" /> : <FaPlay className="text-[12px] md:text-[14px] ml-0.5 md:ml-1" />}
               </button>
               
-              <button onClick={handleNext} className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaStepForward size={14} /></button>
+              <button onClick={handleNext} className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaStepForward className="text-[12px] md:text-[14px]" /></button>
               
               <AnimatePresence>
                 {isExpanded && (
@@ -300,17 +300,17 @@ export default function MusicPlayer() {
                     initial={{ opacity: 0, width: 0 }} 
                     animate={{ opacity: 1, width: "auto" }}
                     exit={{ opacity: 0, width: 0 }}
-                    className="flex items-center gap-3 overflow-hidden ml-2"
+                    className="flex items-center gap-1.5 md:gap-3 overflow-hidden ml-1 md:ml-2"
                   >
-                    <button className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaRedo size={14} /></button>
-                    <div className="w-px h-4 bg-white/20 mx-1" />
+                    <button className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaRedo className="text-[12px] md:text-[14px]" /></button>
+                    <div className="w-px h-3 md:h-4 bg-white/20 mx-0.5 md:mx-1" />
                     
                     {/* PIP Toggle Button */}
                     <button 
                       onClick={() => setIsPipMode(!isPipMode)}
                       className={`${isPipMode ? "text-primary" : "text-text-secondary"} hover:text-primary hover:scale-110 active:scale-90 transition-all duration-300`}
                     >
-                      <FaTv size={14} />
+                      <FaTv className="text-[12px] md:text-[14px]" />
                     </button>
                   </motion.div>
                 )}
@@ -318,26 +318,26 @@ export default function MusicPlayer() {
             </div>
 
             {/* Right Side Buttons */}
-            <div className="flex items-center gap-2 pr-2 border-l border-white/10 pl-3">
+            <div className={`flex items-center gap-1 md:gap-2 pr-1 md:pr-2 border-l border-white/10 pl-1.5 md:pl-3 ${isExpanded ? 'hidden sm:flex' : 'flex'}`}>
               <button 
                 onClick={playHorn} 
                 disabled={isHornCooldown}
                 title={isHornCooldown ? "Please wait..." : "Horn OK Please!"}
-                className={`w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative hover:scale-110 active:scale-95 transition-all duration-300 ${isHornCooldown ? 'opacity-50 grayscale hover:scale-100' : ''}`}
+                className={`w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative hover:scale-110 active:scale-95 transition-all duration-300 ${isHornCooldown ? 'opacity-50 grayscale hover:scale-100' : ''}`}
               >
-                <img src="/horn.png" alt="Horn" className="w-5 h-5 object-contain" />
+                <img src="/horn.png" alt="Horn" className="w-3.5 h-3.5 md:w-5 md:h-5 object-contain" />
               </button>
               <button 
                 onClick={(e) => { e.stopPropagation(); setSidebarView('playlists'); }} 
-                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative text-text-secondary hover:text-white hover:scale-110 active:scale-95 transition-all duration-300"
+                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative text-text-secondary hover:text-white hover:scale-110 active:scale-95 transition-all duration-300"
               >
-                <FaListUl size={12} />
+                <FaListUl className="text-[10px] md:text-[12px]" />
               </button>
               <button 
                 onClick={(e) => { e.stopPropagation(); setSidebarView('about'); }} 
-                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative text-text-secondary hover:text-white hover:scale-110 active:scale-95 transition-all duration-300"
+                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative text-text-secondary hover:text-white hover:scale-110 active:scale-95 transition-all duration-300"
               >
-                <FaInfo size={12} />
+                <FaInfo className="text-[10px] md:text-[12px]" />
               </button>
             </div>
           </div>
@@ -372,7 +372,7 @@ export default function MusicPlayer() {
 
         {/* Social Icons */}
         <motion.div 
-          className="flex items-center gap-6 mt-6 pointer-events-auto"
+          className="flex items-center gap-4 md:gap-6 mt-4 md:mt-6 pointer-events-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 0.8 }}
@@ -401,13 +401,13 @@ export default function MusicPlayer() {
               onClick={() => setSidebarView(null)}
             />
             <motion.div 
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-secondary/90 backdrop-blur-xl border-l border-white/10 z-[200] p-8 overflow-y-auto pointer-events-auto"
+              className="fixed top-0 right-0 bottom-0 w-full sm:max-w-sm bg-secondary/90 backdrop-blur-xl border-l border-white/10 z-[200] p-6 md:p-8 overflow-y-auto pointer-events-auto"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-6 md:mb-8">
                 <h2 className="text-2xl font-bold text-white capitalize">{sidebarView}</h2>
                 <button 
                   onClick={() => setSidebarView(null)}
