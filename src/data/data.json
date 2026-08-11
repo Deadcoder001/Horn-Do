@@ -1,0 +1,65 @@
+{
+  "playlists": [
+    {
+      "id": "pl_1",
+      "name": "सुनहरे नग़मे",
+      "cover": "https://images.pexels.com/photos/1578105/pexels-photo-1578105.jpeg?auto=compress&cs=tinysrgb&w=300",
+      "tracks": [
+        {
+          "id": "t_1",
+          "title": "Raah Mein Unse Mulaqat Ho Gayi",
+          "artist": "Kumar Sanu, Alka Yagnik",
+          "url": "https://youtu.be/vYGPudMvxvI?si=GwgyOtxNV_1VwonU"
+        },
+        {
+          "id": "t_2",
+          "title": "Chura Ke Dil Mera",
+          "artist": "Kumar Sanu, Alka Yagnik",
+          "url": "https://youtu.be/Yqj1_V90KJo?si=QejvVl9WwaF-KaJn"
+        },
+        {
+          "id": "t_3",
+          "title": "Tip Tip Barsa Pani",
+          "artist": "Alka Yagnik, Udit Narayan",
+          "url": "https://youtu.be/VMsn5-a45-s?si=p_r25cnDFTOkRRgl"
+        },
+        {
+          "id": "t_4",
+          "title": "Pehla Nasha",
+          "artist": "Udit Narayan, Sadhana Sargam",
+          "url": "https://youtu.be/SBfPs-PMGTA?si=UtDe7OTOPxxJivD0"
+        },
+        {
+          "id": "t_5",
+          "title": "Tujhe Dekha To",
+          "artist": "Kumar Sanu, Lata Mangeshkar",
+          "url": "https://youtu.be/cNV5hLSa9H8?si=rllW94VR6amOKg6Z"
+        },
+        {
+          "id": "t_6",
+          "title": "Chand Se Parda Keejiye",
+          "artist": "Kumar Sanu",
+          "url": "https://youtu.be/P87IAiJmo4A?si=gf8HI0B1auwrnvuK"
+        },
+        {
+          "id": "t_7",
+          "title": "Tumhe Apna Banane Ki Kasam",
+          "artist": "Kumar Sanu",
+          "url": "https://youtu.be/tPNwGuu_rQ4?si=9aHLjL-tSkBHYm-i"
+        },
+        {
+          "id": "t_8",
+          "title": "Tu Pyaar Hai Kisi Aur Ka",
+          "artist": "Kumar Sanu",
+          "url": "https://youtu.be/47DstHmE-bE?si=ee_7F9pzcr3PR7_j"
+        },
+        {
+          "id": "t_9",
+          "title": "Chori Chori Dil Tera Churayenge",
+          "artist": "Kumar Sanu",
+          "url": "https://youtu.be/B8MSjHTo154?si=upYgDt0CpRofsHa2"
+        }
+      ]
+    }
+  ]
+}
