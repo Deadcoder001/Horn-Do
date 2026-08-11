@@ -22,6 +22,7 @@ export default function MusicPlayer() {
   // New States
   const [activePlaylistIndex, setActivePlaylistIndex] = useState(0);
   const [activeTrackIndex, setActiveTrackIndex] = useState(0);
+  const [expandedPlaylistIndex, setExpandedPlaylistIndex] = useState<number | null>(0);
   const [isPipMode, setIsPipMode] = useState(false);
   const [isHornCooldown, setIsHornCooldown] = useState(false);
 
@@ -105,10 +106,13 @@ export default function MusicPlayer() {
   };
 
   const playPlaylist = (index: number) => {
-    setActivePlaylistIndex(index);
-    setActiveTrackIndex(0);
-    setPlayed(0);
-    setIsPlaying(true);
+    if (activePlaylistIndex !== index) {
+      setActivePlaylistIndex(index);
+      setActiveTrackIndex(0);
+      setPlayed(0);
+      setIsPlaying(true);
+    }
+    setExpandedPlaylistIndex(expandedPlaylistIndex === index ? null : index);
   };
   
   const playHorn = (e: React.MouseEvent) => {
@@ -447,34 +451,40 @@ export default function MusicPlayer() {
                       </div>
 
                       <AnimatePresence>
-                        {activePlaylistIndex === idx && (
+                        {expandedPlaylistIndex === idx && (
                           <motion.div 
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             className="flex flex-col gap-1 mt-2 mb-2 pl-4 border-l-2 border-white/10 ml-6 overflow-hidden"
                           >
-                             {playlist.tracks.map((track, trackIdx) => (
-                               <div 
-                                 key={track.id}
-                                 onClick={() => {
-                                   setActiveTrackIndex(trackIdx);
-                                   setPlayed(0);
-                                   setIsPlaying(true);
-                                 }}
-                                 className={`p-2 rounded-lg text-sm cursor-pointer hover:bg-white/10 transition-colors flex items-center justify-between group/track ${activeTrackIndex === trackIdx ? 'bg-white/10 text-white font-medium' : 'text-text-secondary'}`}
-                               >
-                                 <div className="flex flex-col min-w-0 pr-2">
-                                   <span className="truncate">{track.title}</span>
-                                   <span className="text-xs opacity-60 truncate">{track.artist}</span>
+                            <div className="max-h-60 overflow-y-auto pr-2 custom-scrollbar flex flex-col gap-1">
+                               {playlist.tracks.map((track, trackIdx) => (
+                                 <div 
+                                   key={track.id}
+                                   onClick={(e) => {
+                                     e.stopPropagation();
+                                     if (activePlaylistIndex !== idx) {
+                                       setActivePlaylistIndex(idx);
+                                     }
+                                     setActiveTrackIndex(trackIdx);
+                                     setPlayed(0);
+                                     setIsPlaying(true);
+                                   }}
+                                   className={`p-2 rounded-lg text-sm cursor-pointer hover:bg-white/10 transition-colors flex items-center justify-between group/track ${(activePlaylistIndex === idx && activeTrackIndex === trackIdx) ? 'bg-white/10 text-white font-medium' : 'text-text-secondary'}`}
+                                 >
+                                   <div className="flex flex-col min-w-0 pr-2">
+                                     <span className="truncate">{track.title}</span>
+                                     <span className="text-xs opacity-60 truncate">{track.artist}</span>
+                                   </div>
+                                   {(activePlaylistIndex === idx && activeTrackIndex === trackIdx) && isPlaying ? (
+                                     <div className="w-3 h-3 rounded-full bg-primary animate-pulse flex-shrink-0" />
+                                   ) : (
+                                     <FaPlay size={10} className="text-white opacity-0 group-hover/track:opacity-50 transition-opacity flex-shrink-0" />
+                                   )}
                                  </div>
-                                 {activeTrackIndex === trackIdx && isPlaying ? (
-                                   <div className="w-3 h-3 rounded-full bg-primary animate-pulse flex-shrink-0" />
-                                 ) : (
-                                   <FaPlay size={10} className="text-white opacity-0 group-hover/track:opacity-50 transition-opacity flex-shrink-0" />
-                                 )}
-                               </div>
-                             ))}
+                               ))}
+                            </div>
                           </motion.div>
                         )}
                       </AnimatePresence>

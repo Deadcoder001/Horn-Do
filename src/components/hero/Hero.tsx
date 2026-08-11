@@ -206,7 +206,6 @@ export default function Hero() {
 
       {/* Top Center Stack: Clock & Active Listeners */}
       <div className="absolute top-8 flex flex-col items-center w-full gap-2 z-[50] pointer-events-auto">
-        <ActiveListeners />
         <AppleClock />
       </div>
 
