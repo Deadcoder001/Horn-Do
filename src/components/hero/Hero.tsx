@@ -91,8 +91,7 @@ export default function Hero() {
 
   useEffect(() => {
     const handleResize = () => {
-      // Just use the cloudinary URL for all screen sizes
-      setVideoSrc("https://res.cloudinary.com/doh9aqkfs/video/upload/v1787055188/truck_video_mk3tn5.mp4");
+      setVideoSrc(window.innerWidth < 768 ? "/horndopleasemobile.mp4" : "https://res.cloudinary.com/doh9aqkfs/video/upload/v1787055188/truck_video_mk3tn5.mp4");
     };
     
     // Set initial source
