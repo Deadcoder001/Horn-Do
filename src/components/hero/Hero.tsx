@@ -10,7 +10,7 @@ import { get, set } from 'idb-keyval';
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [videoSrc, setVideoSrc] = useState("/horndoplease.mp4");
+  const [videoSrc, setVideoSrc] = useState("https://res.cloudinary.com/doh9aqkfs/video/upload/v1787055188/truck_video_mk3tn5.mp4");
   
   // Custom Background state
   const [customBgUrl, setCustomBgUrl] = useState<string | null>(null);
@@ -91,7 +91,8 @@ export default function Hero() {
 
   useEffect(() => {
     const handleResize = () => {
-      setVideoSrc(window.innerWidth < 768 ? "/horndopleasemobile.mp4" : "/horndoplease.mp4");
+      // Just use the cloudinary URL for all screen sizes
+      setVideoSrc("https://res.cloudinary.com/doh9aqkfs/video/upload/v1787055188/truck_video_mk3tn5.mp4");
     };
     
     // Set initial source
