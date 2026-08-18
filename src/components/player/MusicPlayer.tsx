@@ -2,8 +2,16 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaRandom, FaRedo, FaHeart, FaListUl, FaInfo, FaGithub, FaLinkedin, FaTimes, FaTv, FaGlobe } from "react-icons/fa";
+import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaRandom, FaRedo, FaHeart, FaListUl, FaInfo, FaGithub, FaLinkedin, FaTimes, FaTv, FaGlobe, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import ReactPlayer from "react-player";
+
+const AnimatedEqualizer = ({ isPlaying }: { isPlaying: boolean }) => (
+  <div className="flex items-end gap-[2px] h-3 opacity-80">
+    <motion.div animate={{ height: isPlaying ? ["3px", "12px", "4px", "10px", "3px"] : "3px" }} transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }} className="w-[3px] bg-primary rounded-t-sm" />
+    <motion.div animate={{ height: isPlaying ? ["3px", "8px", "12px", "6px", "3px"] : "3px" }} transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }} className="w-[3px] bg-primary rounded-t-sm" />
+    <motion.div animate={{ height: isPlaying ? ["3px", "10px", "6px", "12px", "3px"] : "3px" }} transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }} className="w-[3px] bg-primary rounded-t-sm" />
+  </div>
+);
 import playlistData from "@/data/data.json";
 import { usePlayer } from "@/context/PlayerContext";
 import { get, set } from 'idb-keyval';
@@ -25,6 +33,11 @@ export default function MusicPlayer() {
   const [expandedPlaylistIndex, setExpandedPlaylistIndex] = useState<number | null>(0);
   const [isPipMode, setIsPipMode] = useState(false);
   const [isHornCooldown, setIsHornCooldown] = useState(false);
+  
+  // Audio Enhancements
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
 
   // Mixtape Creator State
   const [mixName, setMixName] = useState("");
@@ -206,6 +219,8 @@ export default function MusicPlayer() {
             url={getCleanYoutubeUrl(activeTrack.url)}
             playing={isPlaying}
             controls={isPipMode}
+            volume={volume}
+            muted={isMuted}
             width="100%"
             height="100%"
             onProgress={(p: any) => setPlayed(p.played)}
@@ -235,9 +250,15 @@ export default function MusicPlayer() {
 
       <div className="fixed bottom-8 left-0 right-0 z-[100] flex flex-col items-center pointer-events-none">
         <motion.div 
-          className="glass-panel pointer-events-auto rounded-full overflow-hidden flex flex-col shadow-[0_20px_40px_rgba(0,0,0,0.5)] border-white/10"
+          className="glass-panel pointer-events-auto rounded-full flex flex-col border-white/10 transition-shadow duration-700"
           initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1, width: isExpanded ? "min(95vw, 580px)" : "min(95vw, 420px)", borderRadius: isExpanded ? "24px" : "9999px" }}
+          animate={{ 
+            y: 0, 
+            opacity: 1, 
+            width: isExpanded ? "min(95vw, 680px)" : "min(95vw, 420px)", 
+            borderRadius: isExpanded ? "24px" : "9999px",
+            boxShadow: isPlaying ? "0 0 40px rgba(244, 180, 0, 0.15), 0 20px 40px rgba(0,0,0,0.5)" : "0 0 0 rgba(244, 180, 0, 0), 0 20px 40px rgba(0,0,0,0.5)"
+          }}
           transition={{ 
             default: { type: "spring", stiffness: 300, damping: 30 },
             y: { type: "spring", stiffness: 300, damping: 30, delay: 1.5 },
@@ -264,12 +285,26 @@ export default function MusicPlayer() {
             </motion.div>
             
             {/* Info */}
-            <div className="flex-1 min-w-0 mr-1 md:mr-2 cursor-pointer" onClick={(e) => {
+            <div className="flex-1 min-w-0 mr-1 md:mr-2 cursor-pointer flex items-center justify-between gap-3 overflow-hidden relative" onClick={(e) => {
                   e.stopPropagation();
                   setIsExpanded(!isExpanded);
               }}>
-              <h4 className="text-white font-medium text-xs md:text-sm truncate">{activeTrack.title}</h4>
-              <p className="text-text-secondary text-[10px] md:text-xs truncate">{activeTrack.artist}</p>
+              <div className="flex-1 min-w-0 group relative overflow-hidden flex flex-col justify-center">
+                <motion.div
+                   className="whitespace-nowrap"
+                   animate={{ x: isExpanded && activeTrack.title.length > 25 ? [0, -100, 0] : 0 }}
+                   transition={{ duration: 8, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
+                >
+                  <h4 className="text-white font-medium text-xs md:text-sm inline-block">{activeTrack.title}</h4>
+                </motion.div>
+                <p className="text-text-secondary text-[10px] md:text-xs truncate">{activeTrack.artist}</p>
+              </div>
+              <AnimatedEqualizer isPlaying={isPlaying} />
+              
+              {/* Fade out edges for marquee */}
+              {isExpanded && activeTrack.title.length > 25 && (
+                <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#111111]/80 to-transparent pointer-events-none" />
+              )}
             </div>
             
             {/* Controls */}
@@ -307,6 +342,45 @@ export default function MusicPlayer() {
                     className="flex items-center gap-1.5 md:gap-3 overflow-hidden ml-1 md:ml-2"
                   >
                     <button className="text-text-secondary hover:text-white hover:scale-110 active:scale-90 transition-all duration-300"><FaRedo className="text-[12px] md:text-[14px]" /></button>
+                    
+                    {/* Volume Control */}
+                    <div 
+                      className="relative flex items-center ml-1"
+                      onMouseEnter={() => setShowVolume(true)}
+                      onMouseLeave={() => setShowVolume(false)}
+                    >
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }}
+                        className={`${isMuted || volume === 0 ? "text-red-400" : "text-text-secondary"} hover:text-white hover:scale-110 active:scale-90 transition-all duration-300`}
+                      >
+                        {isMuted || volume === 0 ? <FaVolumeMute className="text-[12px] md:text-[14px]" /> : <FaVolumeUp className="text-[12px] md:text-[14px]" />}
+                      </button>
+                      <AnimatePresence>
+                        {showVolume && (
+                          <motion.div 
+                            initial={{ width: 0, opacity: 0, marginLeft: 0 }}
+                            animate={{ width: 60, opacity: 1, marginLeft: 8 }}
+                            exit={{ width: 0, opacity: 0, marginLeft: 0 }}
+                            className="overflow-hidden flex items-center"
+                          >
+                            <input 
+                              type="range" 
+                              min={0} 
+                              max={1} 
+                              step={0.01} 
+                              value={isMuted ? 0 : volume}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) => {
+                                setVolume(parseFloat(e.target.value));
+                                if (parseFloat(e.target.value) > 0) setIsMuted(false);
+                              }}
+                              className="w-[60px] h-1.5 bg-white/20 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full cursor-pointer"
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
                     <div className="w-px h-3 md:h-4 bg-white/20 mx-0.5 md:mx-1" />
                     
                     {/* PIP Toggle Button */}
@@ -357,12 +431,18 @@ export default function MusicPlayer() {
                 onClick={(e) => e.stopPropagation()}
               >
                   <div 
-                    className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden relative cursor-pointer"
+                    className="w-full h-4 flex items-center relative cursor-pointer group"
                     onClick={handleSeek}
                   >
+                      <div className="w-full h-1.5 group-hover:h-2.5 bg-white/10 rounded-full overflow-hidden relative transition-all duration-300">
+                          <motion.div 
+                              className="absolute top-0 left-0 h-full bg-primary"
+                              style={{ width: `${played * 100}%` }}
+                          />
+                      </div>
                       <motion.div 
-                          className="absolute top-0 left-0 h-full bg-primary transition-all duration-100"
-                          style={{ width: `${played * 100}%` }}
+                        className="absolute w-3.5 h-3.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -ml-1.5 pointer-events-none"
+                        style={{ left: `${played * 100}%` }}
                       />
                   </div>
                   <div className="flex justify-between mt-2 text-[10px] text-text-secondary font-mono">
