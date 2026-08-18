@@ -283,8 +283,8 @@ export default function MusicPlayer() {
           }}
           transition={{ 
             default: { type: "spring", stiffness: 300, damping: 30 },
-            y: { type: "spring", stiffness: 300, damping: 30, delay: 1.5 },
-            opacity: { delay: 1.5 }
+            y: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.5 }
           }}
           onClick={() => !isExpanded && setIsExpanded(true)}
         >
@@ -488,7 +488,7 @@ export default function MusicPlayer() {
           className="flex items-center gap-4 md:gap-6 mt-4 md:mt-6 pointer-events-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2, duration: 0.8 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
         >
           <a href="https://github.com/Deadcoder001" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-white hover:scale-110 transition-all">
             <FaGithub size={20} />
