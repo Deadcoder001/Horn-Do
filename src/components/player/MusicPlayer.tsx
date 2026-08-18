@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaRandom, FaRedo, FaHeart, FaListUl, FaInfo, FaGithub, FaLinkedin, FaTimes, FaTv, FaGlobe, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaRandom, FaRedo, FaHeart, FaListUl, FaInfo, FaGithub, FaLinkedin, FaTimes, FaTv, FaGlobe, FaVolumeUp, FaVolumeMute, FaExpand, FaCompress } from "react-icons/fa";
 import ReactPlayer from "react-player";
 
 const AnimatedEqualizer = ({ isPlaying }: { isPlaying: boolean }) => (
@@ -33,6 +33,7 @@ export default function MusicPlayer() {
   const [expandedPlaylistIndex, setExpandedPlaylistIndex] = useState<number | null>(0);
   const [isPipMode, setIsPipMode] = useState(false);
   const [isHornCooldown, setIsHornCooldown] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   
   // Audio Enhancements
   const [volume, setVolume] = useState(1);
@@ -53,6 +54,14 @@ export default function MusicPlayer() {
         setPlaylists([...DEFAULT_PLAYLISTS, ...data]);
       }
     });
+  }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
   // Safe fallback if active index is out of bounds due to array changes
@@ -140,6 +149,19 @@ export default function MusicPlayer() {
     setTimeout(() => {
       setIsHornCooldown(false);
     }, 4000);
+  };
+
+  const toggleFullscreen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
   };
 
   const addTrackField = () => {
@@ -397,6 +419,13 @@ export default function MusicPlayer() {
 
             {/* Right Side Buttons */}
             <div className={`flex items-center gap-1 md:gap-2 pr-1 md:pr-2 border-l border-white/10 pl-1.5 md:pl-3 ${isExpanded ? 'hidden sm:flex' : 'flex'}`}>
+              <button 
+                onClick={toggleFullscreen} 
+                title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center group relative text-text-secondary hover:text-white hover:scale-110 active:scale-95 transition-all duration-300"
+              >
+                {isFullscreen ? <FaCompress className="text-[10px] md:text-[12px]" /> : <FaExpand className="text-[10px] md:text-[12px]" />}
+              </button>
               <button 
                 onClick={playHorn} 
                 disabled={isHornCooldown}
